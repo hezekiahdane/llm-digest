@@ -1,0 +1,212 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+
+    /* --- 🎨 COLOR TOKENS --- */
+    --color-header: #1e2939;
+    --color-header-accent: #1a40b2;
+    --color-body: #374151;
+    --color-tag: #a76106;
+    --color-primary: #193cb8;
+    --color-nav: #364153;
+    --color-wd-blue: #d6e1f9;
+    --color-wd-orange: #ff9f01;
+    --color-cb-green: #55aa5d;
+    --color-cm-green: #d2eed4;
+
+    /* Primary Blue Colors */
+    --primary-50: #e9eefc;
+    --primary-100: #d3dcf8;
+    --primary-200: #a6b9f2;
+    --primary-300: #7a96eb;
+    --primary-400: #4d73e5;
+    --primary-500: #122c7b;
+    --primary-600: #1a40b2;
+    --primary-700: #143085;
+    --primary-800: #0d2059;
+    --primary-900: #07102c;
+    --primary-950: #030816;
+
+    /* Accent Colors */
+    --accent-50: #fff8e5;
+    --accent-100: #fff1cc;
+    --accent-200: #ffe499;
+    --accent-300: #ffd666;
+    --accent-400: #ffc933;
+    --accent-500: #f0b000;
+    --accent-600: #cc9600;
+    --accent-700: #997000;
+    --accent-800: #664b00;
+    --accent-900: #332500;
+    --accent-950: #1a1300;
+
+    /* --- 📐 LAYOUT VARIABLES (Mobile Default) --- */
+    --padding-x-relaxed: 40px;
+    --padding-x-tight: 16px;
+    --padding-y-hero: 40px;
+    --padding-y-navbar: 8px;
+    --padding-y-footer: 48px;
+
+    /* --- ✍️ TYPOGRAPHY VARIABLES (Mobile Default) --- */
+
+    /* Headings */
+    --text-h1-size: 36px;
+    --text-h1-height: 43.2px;
+    --text-h2-size: 32px;
+    --text-h2-height: 40px;
+    --text-h3-size: 32px;
+    --text-h3-height: 40px;
+    --text-h4-size: 24px;
+    --text-h4-height: 28.8px;
+    --text-h5-size: 24px;
+    --text-h5-height: 28px;
+    --text-h6-size: 16px;
+    --text-h6-height: 20px;
+
+    /* Body */
+    --body-lg-size: 16px;
+    --body-lg-height: 19.2px;
+    --body-md-size: 14px;
+    --body-md-height: 16.8px;
+    --body-sm-size: 14px;
+    --body-sm-height: 16.8px;
+
+    /* UI Elements */
+    --caption-size: 12px;
+    --caption-height: 16px;
+    --tag-size: 16px;
+    --tag-height: 19.2px;
+    --tag-letter-spacing: 0px;
+
+    --font-caption: var(--font-body);
+    /* Font Families (Match these in layout.tsx) */
+    --font-heading: 'Oswald', sans-serif;
+    --font-body: 'Poppins', sans-serif;
+    --font-caption: 'Poppins', sans-serif;
+    --font-gilroy: 'Gilroy', sans-serif;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 2.5rem;
+  }
+
+  /* --- TABLET OVERRIDES (~768px) --- */
+  @media (min-width: 768px) {
+    :root {
+      /* Layout */
+      --padding-x-relaxed: 56px;
+      --padding-y-hero: 72px;
+
+      /* Typography Updates */
+      --text-h1-size: 48px;
+      --text-h1-height: 48px;
+      --text-h2-size: 40px;
+      --text-h2-height: 48px;
+      /* H3-H6 stay same as mobile on tablet per design */
+
+      /* Tag Spacing Update */
+      --tag-letter-spacing: 2px;
+    }
+  }
+
+  /* --- DESKTOP OVERRIDES (~1024px) --- */
+  @media (min-width: 1024px) {
+    :root {
+      /* Layout */
+      --padding-x-relaxed: 80px;
+      --padding-x-tight: 32px;
+      --padding-y-hero: 88px;
+
+      /* Typography Updates */
+      --text-h1-size: 60px;
+      --text-h1-height: 72px;
+      --text-h2-size: 48px;
+      --text-h2-height: 56px;
+      --text-h3-size: 40px;
+      --text-h3-height: 48px;
+      --text-h4-size: 32px;
+      --text-h4-height: 40px;
+      --text-h6-size: 16px;
+      --text-h6-height: 20px;
+
+      /* Body Updates */
+      --body-lg-size: 20px;
+      --body-lg-height: 24px;
+      --body-md-size: 16px;
+      --body-md-height: 19.2px;
+
+      /* UI Updates */
+      --tag-size: 20px;
+      --tag-height: 24px;
+      --tag-letter-spacing: 4px;
+    }
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+/* --- DESKTOP OVERRIDES (~1920px) --- */
+@media (min-width: 1920px) {
+  :root {
+    /* Layout */
+    --padding-x-relaxed: 80px;
+    --padding-x-tight: 48px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
