@@ -3,20 +3,16 @@ import type { Config } from 'tailwindcss';
 const config: Config = {
   darkMode: ['class'],
   content: [
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './styles/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/features/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/lib/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
-      boxShadow: {
-        "inspection-card-glow": '4px 6px 10px rgba(0, 60, 197, 0.2), inset 0 0 20px rgba(106, 200, 255, 0.2)',
-      },
       screens: {
+        '2xl': '1440px',
         '3xl': '1920px',
-        md: '768px',
-        lg: '1440px',
-        xl: '1920px'
       },
       colors: {
         primary: {
@@ -57,10 +53,6 @@ const config: Config = {
         body: 'var(--color-body)',
         tag: 'var(--color-tag)',
         nav: 'var(--color-nav)',
-        wdBlue: 'var(--color-wd-blue)',
-        wdOrange: 'var(--color-wd-orange)',
-        cbGreen: 'var(--color-cb-green)',
-        cmGreen: 'var(--color-cm-green)',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -195,11 +187,11 @@ const config: Config = {
       },
       keyframes: {
         'fade-up': {
-          'from': {
+          from: {
             opacity: '0',
             transform: 'translateY(10px)',
           },
-          'to': {
+          to: {
             opacity: '1',
             transform: 'translateY(0)',
           },
@@ -216,6 +208,7 @@ const config: Config = {
       },
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require('tailwindcss-animate')],
 };
 export default config;

@@ -1,98 +1,146 @@
-# Next.js Scalable Boilerplate (i18n + Shadcn UI)
+# Base System
 
-This is a modern [Next.js](https://nextjs.org) project optimized for scalability, internationalization, and component-driven development. It features a strict folder structure and commit convention to ensure long-term maintainability.
+Industry-grade Next.js base system. Clone this for every new project — it ships with i18n, Resend email, Supabase, security headers, testing infrastructure, and CI/CD pre-configured.
 
-## 🛠 Tech Stack
+## Tech Stack
 
-- **Framework:** Next.js 15 (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **Components:** Shadcn UI (Radix Primitives)
-- **Internationalization:** `next-intl` (Supports English, Burmese, Thai)
-- **Linting:** ESLint + Prettier
+| Layer      | Technology               |
+| ---------- | ------------------------ |
+| Framework  | Next.js 16 (App Router)  |
+| Language   | TypeScript (strict)      |
+| Styling    | Tailwind CSS + shadcn/ui |
+| i18n       | next-intl (en, jp)       |
+| Email      | Resend + React Email     |
+| Database   | Supabase (PostgreSQL)    |
+| Validation | Zod                      |
+| Testing    | Vitest + Playwright      |
+| CI/CD      | GitHub Actions           |
 
----
-
-## 🚀 Getting Started
-
-First, install the dependencies:
+## Quick Start
 
 ```bash
+# 1. Clone and install
+git clone <repo-url> my-project && cd my-project
 npm install
-# or
-yarn
-# or
-pnpm install
-```
 
-Then, run the development server:
-```bash
+# 2. Configure environment
+cp .env.example .env.local
+# Fill in RESEND_API_KEY, NEXT_PUBLIC_SUPABASE_URL, etc.
+
+# 3. Start dev server
 npm run dev
 ```
 
-Open http://localhost:3000 with your browser. The app handles locale redirection automatically (e.g., visiting / redirects to /en).
+## Project Structure
 
-📂 Project Structure
-We follow a modular "Domain-Driven" inspired structure where routes are strictly separated from logic and components.
-
-```bash
-.
-├── app/
-│   ├── [locale]/           # 🌍 All pages live here (Dynamic Routing)
-│   │   ├── layout.tsx      # Root Layout (Server Component)
-│   │   └── page.tsx        # Homepage
-│   └── globals.css         # 🎨 Global styles & Theme Variables
-├── components/
-│   └── ui/                 # 🧩 Shared Shadcn UI components (Button, Input)
-├── i18n/                   # ⚙️ i18n Configuration
-│   ├── request.ts          # Server-side message loading
-│   └── routing.ts          # Locale definitions (en, my, th)
-├── messages/               # 🗣 Translation JSON files
-│   ├── en.json
-│   ├── my.json
-│   └── th.json
-├── lib/                    # 🧰 Utility functions (cn, formatters)
-├── middleware.ts           # 🚦 Locale redirection middleware
-└── next.config.ts          # Next.js config with i18n plugin
+```
+src/
+  app/          Next.js App Router (pages, layouts, API routes)
+  components/   Shared UI components (layout/, common/, ui/)
+  features/     Feature-based modules (home/, contact/)
+  hooks/        Global custom hooks
+  lib/          Utilities, clients, services
+  config/       Site-wide configuration
+  types/        TypeScript type definitions
+  i18n/         Internationalisation config
+  test/         Test setup, mocks, E2E tests
 ```
 
-⚠️ Critical Development Notes
-Routes: Do not create pages directly in app/. All routes must be inside app/[locale]/.
+See [CONVENTIONS.md](./CONVENTIONS.md) for the full folder structure and naming rules.
 
-Async Params: Since this project uses Next.js 15, route parameters are asynchronous. You must await params in your pages and layouts:
-```bash
-// Correct usage in Layout/Page
-export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  // ...
-}
+## Available Scripts
+
+| Script                  | Description                |
+| ----------------------- | -------------------------- |
+| `npm run dev`           | Start development server   |
+| `npm run build`         | Production build           |
+| `npm run start`         | Start production server    |
+| `npm run lint`          | Run ESLint                 |
+| `npm run format`        | Format with Prettier       |
+| `npm run format:check`  | Check formatting (CI)      |
+| `npm run type-check`    | TypeScript type checking   |
+| `npm run test`          | Run unit/integration tests |
+| `npm run test:watch`    | Watch mode                 |
+| `npm run test:coverage` | Tests with coverage report |
+| `npm run test:e2e`      | Playwright E2E tests       |
+| `npm run db:types`      | Regenerate Supabase types  |
+| `npm run analyze`       | Bundle size analysis       |
+
+## Environment Variables
+
+Copy `.env.example` to `.env.local` and configure:
+
+```env
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+RESEND_API_KEY=re_...
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
 ```
 
-📝 Development Guidelines
-To maintain a clean history and codebase, please adhere to the following rules.
+All variables are validated at startup via `src/lib/env.ts`. Missing required variables cause an immediate startup failure with a clear error.
 
-1. Commit Convention We follow the Conventional Commits specification.
+## i18n
 
-Format: type(scope): description
+Supported locales are defined in `src/i18n/routing.ts`. Translation files live in `messages/`.
 
-Allowed Types
-| Type | Meaning | Example |
-| :--- | :--- | :--- |
-| **feat** | A new feature | `feat(ui): add dark mode toggle` |
-| **fix** | A bug fix | `fix(auth): resolve login redirect loop` |
-| **chore** | Maintenance/Config | `chore(deps): upgrade next-intl` |
-| **style** | UI/CSS changes (no logic) | `style(home): adjust hero padding` |
-| **refactor** | Code change (no feature/fix) | `refactor(utils): simplify date format` |
-| **test** | Adding or fixing tests | `test(auth): add unit tests for login` |
-| **perf** | Performance improvements | `perf(image): optimize logo loading` |
-| **build** | Build system/dependency updates | `build(npm): update lockfile` |
-| **revert** | Reverting a previous commit | `revert: restore previous navbar layout` |
-| **docs** | Documentation only | `docs: update readme rules` |
-| **ci** | CI/CD changes | `ci: update vercel build settings` |
-| **types** | TypeScript-only changes | `types(auth): tighten user session types` |
-| **i18n** | Translation / localization changes | `i18n(home): add Thai hero translations` |
-| **ui** | Component-level UI changes | `ui(form): add reusable form field wrapper` |
-| **security** | Security-related changes | `security(auth): prevent session fixation` |
-| **config** | Project configuration changes | `config(tailwind): extend color palette` |
-| **deps** | Dependency updates | `deps(next): upgrade to 15.1.0` |
-| **dx** | Developer experience improvements | `dx(dev): add lint-staged hooks` |
+To add a new locale:
+
+1. Add the locale code to `src/i18n/routing.ts`
+2. Create `messages/<locale>.json`
+3. Update the middleware matcher in `middleware.ts`
+
+## Email (Resend)
+
+Email templates use React Email (`src/lib/resend/templates/`). This ensures:
+
+- All user input is automatically escaped (no XSS)
+- Templates are type-safe
+- Templates can be previewed with `npx email dev`
+
+To send an email, call functions from `src/lib/resend/service.ts`.
+
+## Database (Supabase)
+
+Three client types for Next.js App Router:
+
+- `src/lib/supabase/client.ts` — browser client (Client Components)
+- `src/lib/supabase/server.ts` — server client (Server Components, Route Handlers)
+- `src/lib/supabase/middleware.ts` — middleware client (session refresh)
+
+After schema changes, regenerate types:
+
+```bash
+npm run db:types
+```
+
+Use `BaseRepository` from `src/lib/supabase/repository.ts` as a base class for data access.
+
+## Security
+
+See [SECURITY.md](./SECURITY.md) for the full security posture, OWASP coverage, and incident response steps.
+
+Key measures:
+
+- Security headers (CSP, HSTS, X-Frame-Options) via `next.config.ts`
+- Rate limiting on all API routes (`src/lib/rate-limit.ts`)
+- CSRF origin validation (`src/lib/csrf.ts`)
+- Input validation with Zod at all API boundaries
+- Env vars validated at startup with fail-fast behavior
+
+## Testing
+
+```bash
+npm run test:coverage    # unit + integration (must stay above 80%)
+npm run test:e2e         # Playwright end-to-end
+```
+
+Tests live next to their source in `__tests__/` directories. E2E tests live in `src/test/e2e/`.
+
+## Contributing
+
+1. Branch from `main` with a descriptive name (`feat/add-auth`, `fix/rate-limit-bug`)
+2. Follow [CONVENTIONS.md](./CONVENTIONS.md)
+3. Ensure `npm run test:coverage` passes (80%+ coverage)
+4. Ensure `npm run build` succeeds
+5. Open a pull request — CI will run automatically

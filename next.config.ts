@@ -1,8 +1,78 @@
 import createNextIntlPlugin from 'next-intl/plugin';
+import withBundleAnalyzer from '@next/bundle-analyzer';
+import type { NextConfig } from 'next';
 
-const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
+const withAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
-export default withNextIntl(nextConfig);
+const securityHeaders = [
+  // Prevent MIME-type sniffing
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  // Prevent clickjacking
+  { key: 'X-Frame-Options', value: 'DENY' },
+  // Use modern CSP instead of legacy XSS filter
+  { key: 'X-XSS-Protection', value: '0' },
+  // Control referrer information
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  // Restrict browser feature access
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=(), browsing-topics=()',
+  },
+  // Force HTTPS for 2 years (enable once deployed to production with HTTPS)
+  {
+    key: 'Strict-Transport-Security',
+    value: 'max-age=63072000; includeSubDomains; preload',
+  },
+  // Content Security Policy
+  // Adjust script-src / connect-src as you add third-party services
+  {
+    key: 'Content-Security-Policy',
+    value: [
+      "default-src 'self'",
+      // Next.js requires 'unsafe-inline' for styles; Vercel Analytics needs the CDN
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "img-src 'self' data: https:",
+      "font-src 'self' https://fonts.gstatic.com",
+      // Add your Supabase project URL to connect-src when you set it up
+      "connect-src 'self'",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join('; '),
+  },
+];
+
+const nextConfig: NextConfig = {
+  // Disable the "Powered by Next.js" header
+  poweredByHeader: false,
+
+  // Enable gzip compression
+  compress: true,
+
+  // Strict React mode catches potential issues early
+  reactStrictMode: true,
+
+  // Image optimization config
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
+
+  async headers() {
+    return [
+      {
+        // Apply security headers to all routes
+        source: '/(.*)',
+        headers: securityHeaders,
+      },
+    ];
+  },
+};
+
+export default withAnalyzer(withNextIntl(nextConfig));
