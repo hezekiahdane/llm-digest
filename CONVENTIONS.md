@@ -32,6 +32,52 @@ Following these consistently makes the codebase predictable and easy to navigate
 | CSS custom properties      | `--category-name`             | `--primary-500`, `--text-h1-size`      |
 | i18n keys                  | `camelCase` nested            | `homepage.heroTitle`, `metadata.title` |
 
+## Module Structure
+
+The codebase is organized into self-contained modules under `src/lib/`:
+
+| Module | Status | Purpose |
+|--------|--------|---------|
+| `core/` | Required | Env validation, security (Arcjet, CSRF, CSP), API utilities (withApi, errors, response), config |
+| `auth/` | Opt-in | Supabase Auth clients (browser, server, middleware), auth guard, hooks |
+| `database/` | Opt-in | Drizzle ORM client, schema definitions, migrations, BaseRepository |
+| `email/` | Opt-in | Resend client, email service, React Email templates |
+| `monitoring/` | Opt-in | Sentry error tracking, Vercel Analytics/SpeedInsights |
+| `validators/` | Standalone | Shared Zod schemas (no dependencies on other modules) |
+
+**Rules:**
+- `core/` is always present — everything else is opt-in
+- Delete an opt-in module's folder to remove it from the project
+- Import through barrel `index.ts` files only (e.g., `import { withApi } from '@/lib/core'`)
+- Modules never import from each other's internals
+- Missing env vars for optional modules disable them gracefully (no crashes)
+
+### API Route Pattern (withApi wrapper)
+
+All API routes use the `withApi` wrapper from `core/api`:
+
+```typescript
+import { withApi } from '@/lib/core/api/with-api';
+import { successResponse } from '@/lib/core/api/response';
+import { mySchema } from '@/lib/validators/my-schema';
+
+export const POST = withApi(
+  { schema: mySchema, rateLimit: 'api', csrf: true },
+  async ({ data }) => {
+    // Business logic only — validation, rate limiting, CSRF, and error handling are automatic
+    return successResponse(result);
+  },
+);
+```
+
+### Linting & Formatting
+
+This project uses **Biome** (not ESLint + Prettier):
+- Config: `biome.json`
+- Check: `npm run lint`
+- Fix: `npm run format`
+- VS Code: Install the Biome extension
+
 ## Project Structure
 
 ```
@@ -114,10 +160,10 @@ src/
 
 ## API Routes
 
-- Validate all input with Zod at the route level
-- Apply rate limiting using `contactFormLimiter` or `apiLimiter`
-- Apply CSRF check with `validateCsrfOrigin(req)` for mutations
-- Return typed `ApiResponse<T>` via `successResponse()` / `errorResponse()`
+- Use the `withApi` wrapper from `@/lib/core/api/with-api` for all API routes
+- Pass Zod schema, rate-limit tier, and CSRF flag via the options object
+- Return responses via `successResponse()` / `errorResponse()` from `@/lib/core/api/response`
+- Business logic only inside the handler — validation, rate limiting, CSRF, and error handling are automatic
 - Log errors server-side with `console.error` (never leak stack traces to the client)
 
 ## Testing
@@ -128,12 +174,13 @@ src/
 - Mock external APIs with MSW handlers in `src/test/mocks/handlers.ts`
 - Minimum 80% coverage (enforced by Vitest config)
 
-## Import Order (enforced by Prettier/ESLint)
+## Import Order (enforced by Biome)
 
 1. Node built-ins
 2. External packages
-3. Internal `@/` imports (types, libs, components)
-4. Relative imports
+3. Internal `@/lib/` modules (core, auth, database, email, monitoring, validators)
+4. Internal `@/` imports (components, features, hooks, config, types)
+5. Relative imports
 
 ## Caching & Deployment
 
