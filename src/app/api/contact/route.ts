@@ -1,7 +1,7 @@
 import { withApi } from '@/lib/core/api/with-api';
 import { successResponse } from '@/lib/core/api/response';
 import { contactSchema } from '@/lib/validators/contact.schema';
-import { sendContactEmails } from '@/lib/resend/service';
+import { sendContactEmails } from '@/lib/email/service';
 
 export const POST = withApi(
   {

@@ -6,10 +6,10 @@
  */
 
 import { render } from '@react-email/render';
-import { resend } from '@/lib/resend/client';
+import { resend } from '@/lib/email/client';
 import { env } from '@/lib/core/env';
-import { ContactAdminEmail } from '@/lib/resend/templates/contact-admin';
-import { ContactConfirmationEmail } from '@/lib/resend/templates/contact-confirmation';
+import { ContactAdminEmail } from '@/lib/email/templates/contact-admin';
+import { ContactConfirmationEmail } from '@/lib/email/templates/contact-confirmation';
 import type { ContactFormData } from '@/lib/validators/contact.schema';
 
 interface EmailResult {
@@ -21,6 +21,11 @@ interface EmailResult {
 export async function sendContactEmails(
   data: ContactFormData,
 ): Promise<EmailResult> {
+  if (!resend) {
+    console.warn('RESEND_API_KEY not set — email sending disabled');
+    return { success: false, error: 'Email service not configured' };
+  }
+
   const fromEmail = env.RESEND_FROM_EMAIL;
   const adminEmail = env.RESEND_ADMIN_EMAIL;
 
