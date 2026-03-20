@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { contactSchema } from '../validators/contact.schema';
+import { contactSchema } from '../contact.schema';
 
 const validPayload = {
   name: 'John Doe',

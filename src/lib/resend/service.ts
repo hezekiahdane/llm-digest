@@ -7,7 +7,7 @@
 
 import { render } from '@react-email/render';
 import { resend } from '@/lib/resend/client';
-import { env } from '@/lib/env';
+import { env } from '@/lib/core/env';
 import { ContactAdminEmail } from '@/lib/resend/templates/contact-admin';
 import { ContactConfirmationEmail } from '@/lib/resend/templates/contact-confirmation';
 import type { ContactFormData } from '@/lib/validators/contact.schema';
@@ -21,6 +21,13 @@ interface EmailResult {
 export async function sendContactEmails(
   data: ContactFormData,
 ): Promise<EmailResult> {
+  const fromEmail = env.RESEND_FROM_EMAIL;
+  const adminEmail = env.RESEND_ADMIN_EMAIL;
+
+  if (!fromEmail || !adminEmail) {
+    return { success: false, error: 'Email configuration is missing' };
+  }
+
   try {
     const [adminHtml, userHtml] = await Promise.all([
       render(ContactAdminEmail({ data })),
@@ -30,13 +37,13 @@ export async function sendContactEmails(
     // Send both emails in parallel
     const [adminResult, userResult] = await Promise.allSettled([
       resend.emails.send({
-        from: env.RESEND_FROM_EMAIL,
-        to: [env.RESEND_ADMIN_EMAIL],
+        from: fromEmail,
+        to: [adminEmail],
         subject: `New contact request from ${data.name}`,
         html: adminHtml,
       }),
       resend.emails.send({
-        from: env.RESEND_FROM_EMAIL,
+        from: fromEmail,
         to: [data.email],
         subject: `We received your message`,
         html: userHtml,

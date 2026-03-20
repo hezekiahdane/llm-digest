@@ -7,7 +7,7 @@ import '@/app/globals.css';
 
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { siteConfig } from '@/config/site';
+import { siteConfig } from '@/lib/core/config/site';
 
 export async function generateMetadata({
   params,

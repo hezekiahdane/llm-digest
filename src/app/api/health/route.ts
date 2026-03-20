@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { successResponse } from '@/types/api';
+import { successResponse } from '@/lib/core/api/response';
 
 export async function GET() {
   return NextResponse.json(

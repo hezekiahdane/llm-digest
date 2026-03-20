@@ -14,7 +14,7 @@ import {
   Preview,
   Text,
 } from '@react-email/components';
-import { siteConfig } from '@/config/site';
+import { siteConfig } from '@/lib/core/config/site';
 
 interface ContactConfirmationEmailProps {
   name: string;

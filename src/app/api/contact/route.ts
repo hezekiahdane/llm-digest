@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 import { contactSchema } from '@/lib/validators/contact.schema';
 import { contactFormLimiter } from '@/lib/rate-limit';
-import { validateCsrfOrigin } from '@/lib/csrf';
+import { validateCsrfOrigin } from '@/lib/core/security/csrf';
 import { sendContactEmails } from '@/lib/resend/service';
-import { successResponse, errorResponse } from '@/types/api';
+import { successResponse, errorResponse } from '@/lib/core/api/response';
 
 export async function POST(req: Request) {
   // 1. CSRF origin check
