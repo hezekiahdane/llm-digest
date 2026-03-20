@@ -27,7 +27,7 @@
  * NOTE: Run `npm run db:types` after schema changes to regenerate database types.
  */
 
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/auth/clients/server';
 
 export class BaseRepository<TRow extends Record<string, unknown>> {
   constructor(protected readonly table: string) {}
