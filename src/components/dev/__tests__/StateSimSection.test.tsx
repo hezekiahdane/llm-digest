@@ -13,42 +13,86 @@ const simulators: DevPanelStateSimulator[] = [
 ];
 
 describe('StateSimSection', () => {
-  it('renders simulator label and all state buttons', () => {
-    render(
-      <StateSimSection
-        simulators={simulators}
-        activeStates={{}}
-        onStateChange={vi.fn()}
-      />,
-    );
+  it('renders registered simulator label', () => {
+    render(<StateSimSection />, {
+      devPanelValue: {
+        registeredSimulators: simulators,
+        simulatedStates: {},
+      },
+    });
     expect(screen.getByText('Contact Form')).toBeDefined();
+  });
+
+  it('renders all state buttons for a simulator', () => {
+    render(<StateSimSection />, {
+      devPanelValue: {
+        registeredSimulators: simulators,
+        simulatedStates: {},
+      },
+    });
     expect(screen.getByText('idle')).toBeDefined();
     expect(screen.getByText('success')).toBeDefined();
     expect(screen.getByText('error')).toBeDefined();
   });
 
-  it('calls onStateChange with correct id and state when button clicked', () => {
-    const onStateChange = vi.fn();
-    render(
-      <StateSimSection
-        simulators={simulators}
-        activeStates={{}}
-        onStateChange={onStateChange}
-      />,
-    );
-    fireEvent.click(screen.getByText('success'));
-    expect(onStateChange).toHaveBeenCalledWith('contactForm', 'success');
-  });
-
-  it('highlights the active state button', () => {
-    render(
-      <StateSimSection
-        simulators={simulators}
-        activeStates={{ contactForm: 'success' }}
-        onStateChange={vi.fn()}
-      />,
-    );
+  it('active state button has highlighted appearance (border-blue-500)', () => {
+    render(<StateSimSection />, {
+      devPanelValue: {
+        registeredSimulators: simulators,
+        simulatedStates: { contactForm: 'success' },
+      },
+    });
     const btn = screen.getByText('success').closest('button');
     expect(btn?.className).toContain('border-blue-500');
+  });
+
+  it('clicking a state button calls setSimulatedState with id and state', () => {
+    const setSimulatedState = vi.fn();
+    render(<StateSimSection />, {
+      devPanelValue: {
+        registeredSimulators: simulators,
+        simulatedStates: {},
+        setSimulatedState,
+      },
+    });
+    fireEvent.click(screen.getByText('success'));
+    expect(setSimulatedState).toHaveBeenCalledWith('contactForm', 'success');
+  });
+
+  it('shows unregistered form hint when unregisteredFormCount > 0', () => {
+    render(<StateSimSection />, {
+      devPanelValue: {
+        registeredSimulators: simulators,
+        simulatedStates: {},
+        unregisteredFormCount: 2,
+      },
+    });
+    expect(
+      screen.getByText(
+        /2 form\(s\) detected — add useSimulatedState to wire states\./i,
+      ),
+    ).toBeDefined();
+  });
+
+  it('hides unregistered form hint when unregisteredFormCount === 0', () => {
+    render(<StateSimSection />, {
+      devPanelValue: {
+        registeredSimulators: simulators,
+        simulatedStates: {},
+        unregisteredFormCount: 0,
+      },
+    });
+    expect(screen.queryByText(/form\(s\) detected/i)).toBeNull();
+  });
+
+  it('shows empty state when no simulators and no unregistered forms', () => {
+    render(<StateSimSection />, {
+      devPanelValue: {
+        registeredSimulators: [],
+        simulatedStates: {},
+        unregisteredFormCount: 0,
+      },
+    });
+    expect(screen.getByText('No simulators registered.')).toBeDefined();
   });
 });
