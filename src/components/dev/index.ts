@@ -28,4 +28,4 @@ export { DevPanel } from './DevPanel';
 export type { DevPanelContextValue } from './DevPanelProvider';
 export { DevPanelProvider } from './DevPanelProvider';
 export { useDevPanel } from './useDevPanel';
-// NOTE: useSimulatedState export is added in Task 4 — the file doesn't exist yet
+export { useSimulatedState } from './useSimulatedState';
