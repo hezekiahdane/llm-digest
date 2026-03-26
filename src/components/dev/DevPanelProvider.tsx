@@ -13,6 +13,8 @@ export interface DevPanelContextValue {
   config: DevPanelConfig;
 }
 
+// Null-safe fallback returned by useDevPanel() when called outside the provider.
+// The context itself is null by default (createContext(null)) for TypeScript strictness.
 export const defaultDevPanelState: DevPanelContextValue = {
   isOpen: false,
   togglePanel: () => {},
@@ -58,6 +60,13 @@ export function DevPanelProvider({ config, children }: DevPanelProviderProps) {
         document.body.classList.remove(toggle.cssClass);
       }
     }
+    return () => {
+      for (const [id, enabled] of Object.entries(debugToggles)) {
+        if (!enabled) continue;
+        const toggle = config.debugToggles?.find((t) => t.id === id);
+        if (toggle) document.body.classList.remove(toggle.cssClass);
+      }
+    };
   }, [debugToggles, config.debugToggles]);
 
   // Keyboard listener — backtick toggles panel. Cleaned up on unmount.
