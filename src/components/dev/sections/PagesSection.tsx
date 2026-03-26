@@ -85,7 +85,10 @@ export function PagesSection() {
             </button>
             <div className="flex items-center gap-2">
               <span
-                className={`rounded px-1.5 py-0.5 text-[9px] font-bold tracking-wider ${badge.className}`}
+                className={cn(
+                  'rounded px-1.5 py-0.5 text-[9px] font-bold tracking-wider',
+                  badge.className,
+                )}
               >
                 {badge.label}
               </span>
