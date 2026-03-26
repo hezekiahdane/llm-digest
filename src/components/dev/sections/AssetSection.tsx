@@ -20,7 +20,7 @@ function scanAssets(): ScannedAsset[] {
       value:
         img.naturalWidth && img.naturalHeight
           ? `${img.naturalWidth}×${img.naturalHeight}`
-          : '—',
+          : (img.src.split('/').pop() ?? '—'),
     };
   });
   const videos = Array.from(document.querySelectorAll('video[src]')).map(
