@@ -11,12 +11,14 @@ describe('GET /api/dev/pages', () => {
     vi.resetModules();
   });
   afterEach(() => {
-    process.env.NODE_ENV = originalNodeEnv;
+    // biome-ignore lint/suspicious/noExplicitAny: NODE_ENV is read-only in TS types but writable at runtime for tests
+    (process.env as any).NODE_ENV = originalNodeEnv;
     delete process.env.NEXT_PUBLIC_VERCEL_ENV;
   });
 
   it('returns discovered pages in development', async () => {
-    process.env.NODE_ENV = 'development';
+    // biome-ignore lint/suspicious/noExplicitAny: NODE_ENV is read-only in TS types but writable at runtime for tests
+    (process.env as any).NODE_ENV = 'development';
     const { readdirSync } = await import('node:fs');
     vi.mocked(readdirSync).mockImplementation((dir: unknown) => {
       const path = dir as string;
@@ -51,7 +53,8 @@ describe('GET /api/dev/pages', () => {
   });
 
   it('omits route group segment from path when (group) directory is present', async () => {
-    process.env.NODE_ENV = 'development';
+    // biome-ignore lint/suspicious/noExplicitAny: NODE_ENV is read-only in TS types but writable at runtime for tests
+    (process.env as any).NODE_ENV = 'development';
     const { readdirSync } = await import('node:fs');
     vi.mocked(readdirSync).mockImplementation((dir: unknown) => {
       const path = dir as string;
@@ -88,7 +91,8 @@ describe('GET /api/dev/pages', () => {
   });
 
   it('returns empty array when readdirSync throws', async () => {
-    process.env.NODE_ENV = 'development';
+    // biome-ignore lint/suspicious/noExplicitAny: NODE_ENV is read-only in TS types but writable at runtime for tests
+    (process.env as any).NODE_ENV = 'development';
     const { readdirSync } = await import('node:fs');
     vi.mocked(readdirSync).mockImplementation(() => {
       throw new Error('ENOENT: no such file or directory');
@@ -105,7 +109,8 @@ describe('GET /api/dev/pages', () => {
   });
 
   it('throws NotFoundError in production', async () => {
-    process.env.NODE_ENV = 'production';
+    // biome-ignore lint/suspicious/noExplicitAny: NODE_ENV is read-only in TS types but writable at runtime for tests
+    (process.env as any).NODE_ENV = 'production';
     // Remove preview flag so env.NEXT_PUBLIC_VERCEL_ENV is undefined.
     // vi.resetModules() ensures the env module re-initializes from process.env on
     // each dynamic import, so this mutation is visible to the freshly imported route.

@@ -31,6 +31,10 @@ const baseCtx = {
   registeredSimulators: simulators,
   registerSimulator: vi.fn(),
   unregisterSimulator: vi.fn(),
+  discoveredPages: [],
+  blockedPages: [],
+  setPageBlocked: vi.fn(),
+  unregisteredFormCount: 0,
   config,
 };
 
