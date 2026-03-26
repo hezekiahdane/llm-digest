@@ -31,12 +31,6 @@ export interface DevPanelConfig {
   assets?: DevPanelAsset[];
 }
 
-// Re-exports added as files are created in subsequent tasks:
-// export { DevPanelProvider } from './DevPanelProvider';   // Task 4
-// export { useDevPanel } from './useDevPanel';              // Task 4
-// export type { DevPanelContextValue } from './DevPanelProvider'; // Task 4
-// export { DevPanel } from './DevPanel';                   // Task 10
-
 export { DevPanel } from './DevPanel';
 export type { DevPanelContextValue } from './DevPanelProvider';
 export { DevPanelProvider } from './DevPanelProvider';

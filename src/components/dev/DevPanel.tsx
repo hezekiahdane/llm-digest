@@ -1,6 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
+import { env } from '@/lib/core/env';
 import type { DevPanelContextValue } from './DevPanelProvider';
 import { AssetSection } from './sections/AssetSection';
 import { DebugSection } from './sections/DebugSection';
@@ -35,9 +36,11 @@ export function DevPanel({ ctx }: DevPanelProps) {
   const params = useParams();
   const locale = typeof params?.locale === 'string' ? params.locale : 'en';
 
+  const vercelEnv = env.NEXT_PUBLIC_VERCEL_ENV;
   const nodeEnv = process.env.NODE_ENV; // NODE_ENV: Next.js static analysis exception
+  const envKey = vercelEnv ?? nodeEnv;
   const badge =
-    ENV_BADGE[nodeEnv as keyof typeof ENV_BADGE] ?? ENV_BADGE.development;
+    ENV_BADGE[envKey as keyof typeof ENV_BADGE] ?? ENV_BADGE.development;
 
   const {
     config,
