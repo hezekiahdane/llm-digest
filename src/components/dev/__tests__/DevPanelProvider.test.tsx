@@ -5,6 +5,12 @@ import { act, render, screen } from '@/test/utils';
 import { DevPanelContext, DevPanelProvider } from '../DevPanelProvider';
 import type { DevPanelConfig } from '../index';
 
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn() }),
+  usePathname: () => '/',
+  useParams: () => ({ locale: 'en' }),
+}));
+
 const config: DevPanelConfig = {
   projectName: 'Test Project',
   pages: [{ label: 'Home', path: '/', status: 'active' }],

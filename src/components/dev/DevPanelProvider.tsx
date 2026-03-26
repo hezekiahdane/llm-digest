@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useCallback, useEffect, useState } from 'react';
+import { DevPanel } from './DevPanel';
 import type { DevPanelConfig } from './index';
 
 export interface DevPanelContextValue {
@@ -91,6 +92,17 @@ export function DevPanelProvider({ config, children }: DevPanelProviderProps) {
       }}
     >
       {children}
+      <DevPanel
+        ctx={{
+          isOpen,
+          togglePanel,
+          debugToggles,
+          setDebugToggle,
+          simulatedStates,
+          setSimulatedState,
+          config,
+        }}
+      />
     </DevPanelContext.Provider>
   );
 }
