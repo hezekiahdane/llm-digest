@@ -15,6 +15,16 @@
  *   }
  */
 
+if (process.env.NODE_ENV === 'production') {
+  // biome-ignore lint/suspicious/noConsole: intentional production deprecation warning
+  console.warn(
+    '[rate-limit] WARNING: In-memory rate limiting is not suitable for production ' +
+      'multi-instance deployments (e.g. Vercel serverless). ' +
+      'Migrate to a distributed store such as Upstash Redis: ' +
+      'https://upstash.com/docs/redis/sdks/ratelimit-ts/overview',
+  );
+}
+
 interface RateLimiterOptions {
   /** Maximum number of requests allowed within the window */
   limit: number;

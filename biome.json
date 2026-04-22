@@ -57,7 +57,8 @@
       "!**/coverage",
       "!**/playwright-report",
       "!**/src/types/database.ts",
-      "!next-env.d.ts"
+      "!next-env.d.ts",
+      "!**/.superpowers"
     ]
   }
 }

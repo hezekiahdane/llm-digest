@@ -18,13 +18,18 @@ export function generateCspNonce(): string {
 }
 
 export function buildCspHeader(nonce: string): string {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
+  const connectSrc = supabaseUrl
+    ? `connect-src 'self' ${supabaseUrl}`
+    : "connect-src 'self'";
+
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://va.vercel-scripts.com`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: https:",
     "font-src 'self' https://fonts.gstatic.com",
-    "connect-src 'self'",
+    connectSrc,
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",

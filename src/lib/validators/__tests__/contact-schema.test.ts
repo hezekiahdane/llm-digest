@@ -55,4 +55,47 @@ describe('contactSchema', () => {
     });
     expect(result.success).toBe(false);
   });
+
+  it('rejects a name longer than 100 characters', () => {
+    const result = contactSchema.safeParse({
+      ...validPayload,
+      name: 'a'.repeat(101),
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a company longer than 200 characters', () => {
+    const result = contactSchema.safeParse({
+      ...validPayload,
+      company: 'a'.repeat(201),
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a phone longer than 20 characters', () => {
+    const result = contactSchema.safeParse({
+      ...validPayload,
+      phone: '1'.repeat(21),
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a message longer than 5000 characters', () => {
+    const result = contactSchema.safeParse({
+      ...validPayload,
+      message: 'a'.repeat(5001),
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('accepts fields at exact max boundary', () => {
+    const result = contactSchema.safeParse({
+      ...validPayload,
+      name: 'a'.repeat(100),
+      company: 'a'.repeat(200),
+      phone: '1'.repeat(20),
+      message: 'a'.repeat(5000),
+    });
+    expect(result.success).toBe(true);
+  });
 });

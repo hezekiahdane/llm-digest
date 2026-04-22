@@ -7,6 +7,7 @@
 
 import { createServerClient } from '@supabase/ssr';
 import type { NextRequest, NextResponse } from 'next/server';
+import { env } from '@/lib/core/env';
 import type { Database } from '@/types/database';
 
 export function createMiddlewareClient(
@@ -14,8 +15,14 @@ export function createMiddlewareClient(
   response: NextResponse,
 ) {
   return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    env.NEXT_PUBLIC_SUPABASE_URL ??
+      (() => {
+        throw new Error('NEXT_PUBLIC_SUPABASE_URL is required');
+      })(),
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
+      (() => {
+        throw new Error('NEXT_PUBLIC_SUPABASE_ANON_KEY is required');
+      })(),
     {
       cookies: {
         getAll() {
