@@ -23,27 +23,16 @@ const securityHeaders = [
     key: 'Permissions-Policy',
     value: 'camera=(), microphone=(), geolocation=(), browsing-topics=()',
   },
-  // Force HTTPS for 2 years (enable once deployed to production with HTTPS)
-  {
-    key: 'Strict-Transport-Security',
-    value: 'max-age=63072000; includeSubDomains; preload',
-  },
-  // Content Security Policy
-  // For nonce-based CSP, see src/lib/core/security/csp.ts (requires deeper Next.js integration)
-  {
-    key: 'Content-Security-Policy',
-    value: [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "img-src 'self' data: https:",
-      "font-src 'self' https://fonts.gstatic.com",
-      "connect-src 'self'",
-      "frame-ancestors 'none'",
-      "base-uri 'self'",
-      "form-action 'self'",
-    ].join('; '),
-  },
+  // Force HTTPS for 2 years — production only (avoids breaking local dev and preview envs)
+  ...(process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+    ? [
+        {
+          key: 'Strict-Transport-Security',
+          value: 'max-age=63072000; includeSubDomains; preload',
+        },
+      ]
+    : []),
+  // CSP is set dynamically per-request by middleware (nonce-based) — no static entry here
 ];
 
 const nextConfig: NextConfig = {

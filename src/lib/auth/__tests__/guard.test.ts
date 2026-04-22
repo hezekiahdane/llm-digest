@@ -37,4 +37,48 @@ describe('authGuard', () => {
     expect(location).toContain('redirect=');
     expect(location).toContain('settings');
   });
+
+  it('does not set redirect param for protocol-relative URL //evil.com', () => {
+    const req = new NextRequest(new URL('http://localhost:3000/en/dashboard'));
+    // Simulate a manipulated pathname that starts with //
+    Object.defineProperty(req.nextUrl, 'pathname', { value: '//evil.com' });
+    const res = NextResponse.next();
+    const result = authGuard(req, res, false);
+    const location = result.headers.get('location') ?? '';
+    expect(location).not.toContain('evil.com');
+    expect(location).not.toContain('redirect=');
+  });
+
+  it('does not set redirect param for absolute URL http://evil.com/', () => {
+    const req = new NextRequest(new URL('http://localhost:3000/en/dashboard'));
+    Object.defineProperty(req.nextUrl, 'pathname', {
+      value: 'http://evil.com/',
+    });
+    const res = NextResponse.next();
+    const result = authGuard(req, res, false);
+    const location = result.headers.get('location') ?? '';
+    expect(location).not.toContain('evil.com');
+    expect(location).not.toContain('redirect=');
+  });
+
+  it('does not set redirect param for absolute URL https://phishing.site', () => {
+    const req = new NextRequest(new URL('http://localhost:3000/en/dashboard'));
+    Object.defineProperty(req.nextUrl, 'pathname', {
+      value: 'https://phishing.site',
+    });
+    const res = NextResponse.next();
+    const result = authGuard(req, res, false);
+    const location = result.headers.get('location') ?? '';
+    expect(location).not.toContain('phishing.site');
+    expect(location).not.toContain('redirect=');
+  });
+
+  it('sets redirect param for valid relative path /dashboard', () => {
+    const req = makeRequest('/en/dashboard');
+    const res = NextResponse.next();
+    const result = authGuard(req, res, false);
+    const location = result.headers.get('location') ?? '';
+    expect(location).toContain('redirect=');
+    expect(location).toContain('dashboard');
+  });
 });

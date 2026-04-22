@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { Analytics, SpeedInsights } from '@/lib/monitoring';
@@ -81,6 +82,8 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params;
   const messages = await getMessages();
+  // nonce is forwarded by middleware for use with <Script nonce={nonce}> tags
+  const _nonce = (await headers()).get('x-nonce') ?? '';
 
   const isDev =
     process.env.NODE_ENV === 'development' || // NODE_ENV: Next.js static analysis exception

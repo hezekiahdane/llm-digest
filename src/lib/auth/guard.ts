@@ -17,7 +17,12 @@ export function authGuard(
 
   if (isProtected && !hasSession) {
     const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('redirect', pathname);
+    // Only set the redirect param for relative paths to prevent open redirect attacks.
+    const isRelativePath =
+      pathname.startsWith('/') && !pathname.startsWith('//');
+    if (isRelativePath) {
+      loginUrl.searchParams.set('redirect', pathname);
+    }
     return NextResponse.redirect(loginUrl);
   }
 

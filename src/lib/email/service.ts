@@ -55,9 +55,19 @@ export async function sendContactEmails(
     ]);
 
     if (adminResult.status === 'rejected') {
+      // biome-ignore lint/suspicious/noConsole: server-side error logging
+      console.error(
+        '[email] Failed to send admin notification:',
+        adminResult.reason,
+      );
     }
 
     if (userResult.status === 'rejected') {
+      // biome-ignore lint/suspicious/noConsole: server-side error logging
+      console.error(
+        '[email] Failed to send user confirmation:',
+        userResult.reason,
+      );
     }
 
     // Consider the operation successful if the admin email was sent
