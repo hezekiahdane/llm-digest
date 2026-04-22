@@ -1,6 +1,6 @@
 {
   "name": "base-system",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Industry-grade Next.js base system with i18n, Resend, Supabase, and Payload CMS",
   "private": true,
   "scripts": {
