@@ -3,10 +3,12 @@ import { describe, expect, it } from 'vitest';
 import { server } from '@/test/mocks/server';
 import { fetchBenchmarks } from '../benchmarks';
 
+const OPENROUTER_URL = 'https://openrouter.ai/api/v1/models';
+
 describe('fetchBenchmarks', () => {
-  it('returns benchmark data normalized to our schema', async () => {
+  it('returns all 8 target models', async () => {
     const results = await fetchBenchmarks();
-    expect(results.length).toBeGreaterThan(0);
+    expect(results).toHaveLength(8);
     for (const model of results) {
       expect(model.id).toBeTruthy();
       expect(model.name).toBeTruthy();
@@ -14,7 +16,7 @@ describe('fetchBenchmarks', () => {
     }
   });
 
-  it('returns only target models', async () => {
+  it('returns only target model IDs', async () => {
     const TARGET_IDS = [
       'gpt-4o',
       'gpt-4.1',
@@ -31,35 +33,39 @@ describe('fetchBenchmarks', () => {
     }
   });
 
-  it('maps provider correctly from API response', async () => {
+  it('has correct provider mappings', async () => {
     const results = await fetchBenchmarks();
-    const openai = results.find((m) => m.id === 'gpt-4o');
-    expect(openai?.provider).toBe('openai');
-    const anthropic = results.find((m) => m.id === 'claude-sonnet-4-6');
-    expect(anthropic?.provider).toBe('anthropic');
+    expect(results.find((m) => m.id === 'gpt-4o')?.provider).toBe('openai');
+    expect(results.find((m) => m.id === 'claude-sonnet-4-6')?.provider).toBe(
+      'anthropic',
+    );
+    expect(results.find((m) => m.id === 'gemini-2.5-pro')?.provider).toBe(
+      'google',
+    );
+    expect(results.find((m) => m.id === 'llama-4-maverick')?.provider).toBe(
+      'meta',
+    );
   });
 
-  it('returns empty array when API is unavailable', async () => {
-    server.use(
-      http.get('https://artificialanalysis.ai/api/v1/models', () =>
-        HttpResponse.error(),
-      ),
-    );
+  it('includes hardcoded benchmark scores', async () => {
+    const results = await fetchBenchmarks();
+    const o3 = results.find((m) => m.id === 'o3');
+    expect(o3?.mmlu).toBe(96.7);
+    expect(o3?.humaneval).toBe(96.7);
+    expect(o3?.math).toBe(97.1);
+  });
+
+  it('returns pricing from OpenRouter when available', async () => {
+    const results = await fetchBenchmarks();
+    const gpt4o = results.find((m) => m.id === 'gpt-4o');
+    // MSW mock returns gpt-4o with pricing
+    expect(gpt4o?.inputPrice).not.toBeNull();
+    expect(gpt4o?.outputPrice).not.toBeNull();
+  });
+
+  it('returns null pricing when OpenRouter API is unavailable', async () => {
+    server.use(http.get(OPENROUTER_URL, () => HttpResponse.error()));
     const results = await fetchBenchmarks();
     expect(results).toEqual([]);
-  });
-
-  it('returns null for missing benchmark fields', async () => {
-    server.use(
-      http.get('https://artificialanalysis.ai/api/v1/models', () =>
-        HttpResponse.json({
-          models: [{ id: 'gpt-4o', name: 'GPT-4o', provider: 'openai' }],
-        }),
-      ),
-    );
-    const results = await fetchBenchmarks();
-    const model = results.find((m) => m.id === 'gpt-4o');
-    expect(model?.mmlu).toBeNull();
-    expect(model?.inputPrice).toBeNull();
   });
 });

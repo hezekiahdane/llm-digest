@@ -35,9 +35,13 @@ export const handlers = [
   http.get('https://metastatus.com/api/v2/summary.json', () =>
     HttpResponse.json(mockStatuspageResponse('none')),
   ),
-  // Google Cloud Status
+  // Google Cloud Status — returns a top-level array, not { items: [] }
   http.get('https://status.cloud.google.com/incidents.json', () =>
-    HttpResponse.json({ items: [] }),
+    HttpResponse.json([]),
+  ),
+  // Meta developer platform status
+  http.get('https://developers.facebook.com/status/dashboard/', () =>
+    HttpResponse.text('<html>ok</html>'),
   ),
   // RSS feeds
   http.get('https://openai.com/news/rss.xml', () =>
@@ -52,31 +56,41 @@ export const handlers = [
   http.get('https://ai.meta.com/blog/rss', () =>
     HttpResponse.text(mockRssXml('meta', 3)),
   ),
-  // Artificial Analysis
-  http.get('https://artificialanalysis.ai/api/v1/models', () =>
+  // OpenRouter — pricing source for benchmarks fetcher
+  http.get('https://openrouter.ai/api/v1/models', () =>
     HttpResponse.json({
-      models: [
+      data: [
         {
-          id: 'gpt-4o',
-          name: 'GPT-4o',
-          provider: 'openai',
-          quality_index: 88.7,
-          coding_index: 90.2,
-          math_index: 76.6,
-          input_price: 2.5,
-          output_price: 10.0,
-          median_output_tokens_per_second: 2.2,
+          id: 'openai/gpt-4o',
+          pricing: { prompt: '0.0000025', completion: '0.00001' },
         },
         {
-          id: 'claude-sonnet-4-6',
-          name: 'Claude Sonnet 4.6',
-          provider: 'anthropic',
-          quality_index: 91.2,
-          coding_index: 88.5,
-          math_index: 80.1,
-          input_price: 3.0,
-          output_price: 15.0,
-          median_output_tokens_per_second: 1.9,
+          id: 'openai/gpt-4.1',
+          pricing: { prompt: '0.000002', completion: '0.000008' },
+        },
+        {
+          id: 'openai/o3',
+          pricing: { prompt: '0.000002', completion: '0.000008' },
+        },
+        {
+          id: 'anthropic/claude-opus-4',
+          pricing: { prompt: '0.000015', completion: '0.000075' },
+        },
+        {
+          id: 'anthropic/claude-sonnet-4.6',
+          pricing: { prompt: '0.000003', completion: '0.000015' },
+        },
+        {
+          id: 'google/gemini-2.5-pro',
+          pricing: { prompt: '0.00000125', completion: '0.00001' },
+        },
+        {
+          id: 'google/gemini-2.5-flash',
+          pricing: { prompt: '0.0000003', completion: '0.0000025' },
+        },
+        {
+          id: 'meta-llama/llama-4-maverick',
+          pricing: { prompt: '0.0000002', completion: '0.0000006' },
         },
       ],
     }),
