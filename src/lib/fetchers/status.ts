@@ -53,6 +53,8 @@ async function fetchGoogleStatus(now: string): Promise<RawProviderStatus> {
   );
   let status: ProviderStatus = 'operational';
   if (active.length > 0) {
+    // Google Cloud incident severity values: 'low' | 'medium' | 'high'
+    // Source: https://status.cloud.google.com/incidents.json schema
     status = active.some((i) => i.severity === 'high') ? 'outage' : 'degraded';
   }
   return { provider: 'google', status, lastChecked: now };
@@ -76,7 +78,7 @@ export async function fetchAllStatuses(
     if (result.status === 'fulfilled') return result.value;
     return {
       provider: providers[i],
-      status: 'unknown' as ProviderStatus,
+      status: 'unknown',
       lastChecked: now,
     };
   });
