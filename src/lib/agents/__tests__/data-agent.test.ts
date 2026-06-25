@@ -43,11 +43,6 @@ const mockStatuses: RawProviderStatus[] = [
     status: 'operational',
     lastChecked: '2026-06-25T00:00:00.000Z',
   },
-  {
-    provider: 'meta',
-    status: 'operational',
-    lastChecked: '2026-06-25T00:00:00.000Z',
-  },
 ];
 
 const mockBenchmarks: RawBenchmark[] = [
@@ -89,7 +84,7 @@ describe('runDataAgent', () => {
   it('returns a valid DashboardSnapshot with all fields', async () => {
     const snapshot = await runDataAgent();
     expect(snapshot.fetchedAt).toBeTruthy();
-    expect(snapshot.statuses).toHaveLength(4);
+    expect(snapshot.statuses).toHaveLength(3);
     expect(snapshot.benchmarks).toHaveLength(1);
     expect(snapshot.releases).toHaveLength(1);
     expect(Array.isArray(snapshot.activity)).toBe(true);
@@ -144,11 +139,6 @@ describe('runDataAgent', () => {
       },
       {
         provider: 'google',
-        status: 'operational',
-        lastChecked: '2026-06-25T00:00:00.000Z',
-      },
-      {
-        provider: 'meta',
         status: 'operational',
         lastChecked: '2026-06-25T00:00:00.000Z',
       },

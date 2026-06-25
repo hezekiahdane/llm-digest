@@ -4,8 +4,8 @@ import '@/app/globals.css';
 
 export const metadata: Metadata = {
   title: {
-    default: 'AI Intelligence Dashboard',
-    template: '%s | AI Intelligence Dashboard',
+    default: 'AI Digest Dashboard',
+    template: '%s | AI Digest Dashboard',
   },
   description:
     'Live AI model comparison — status, benchmarks, pricing, and releases across OpenAI, Anthropic, Google, and Meta.',

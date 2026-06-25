@@ -15,10 +15,10 @@ export function Dashboard({ snapshot }: DashboardProps) {
       <div className="mb-6 flex items-end justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
-            AI Intelligence Dashboard
+            AI Digest Dashboard
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Live monitoring across OpenAI, Anthropic, Google, and Meta
+            Live monitoring across OpenAI, Anthropic, and Google
           </p>
         </div>
         <UpdatedAt fetchedAt={snapshot.fetchedAt} />

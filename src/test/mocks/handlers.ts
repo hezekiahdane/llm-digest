@@ -25,23 +25,16 @@ function mockRssXml(provider: string, count: number): string {
 }
 
 export const handlers = [
-  // Statuspage.io — OpenAI, Anthropic, Meta
+  // Statuspage.io — OpenAI, Anthropic
   http.get('https://status.openai.com/api/v2/summary.json', () =>
     HttpResponse.json(mockStatuspageResponse('none')),
   ),
   http.get('https://status.anthropic.com/api/v2/summary.json', () =>
     HttpResponse.json(mockStatuspageResponse('none')),
   ),
-  http.get('https://metastatus.com/api/v2/summary.json', () =>
-    HttpResponse.json(mockStatuspageResponse('none')),
-  ),
-  // Google Cloud Status — returns a top-level array, not { items: [] }
+  // Google Cloud Status — returns a top-level array
   http.get('https://status.cloud.google.com/incidents.json', () =>
     HttpResponse.json([]),
-  ),
-  // Meta developer platform status
-  http.get('https://developers.facebook.com/status/dashboard/', () =>
-    HttpResponse.text('<html>ok</html>'),
   ),
   // RSS feeds
   http.get('https://openai.com/news/rss.xml', () =>
@@ -52,9 +45,6 @@ export const handlers = [
   ),
   http.get('https://blog.google/products/gemini/rss', () =>
     HttpResponse.text(mockRssXml('google', 3)),
-  ),
-  http.get('https://ai.meta.com/blog/rss', () =>
-    HttpResponse.text(mockRssXml('meta', 3)),
   ),
   // OpenRouter — pricing source for benchmarks fetcher
   http.get('https://openrouter.ai/api/v1/models', () =>
@@ -87,10 +77,6 @@ export const handlers = [
         {
           id: 'google/gemini-2.5-flash',
           pricing: { prompt: '0.0000003', completion: '0.0000025' },
-        },
-        {
-          id: 'meta-llama/llama-4-maverick',
-          pricing: { prompt: '0.0000002', completion: '0.0000006' },
         },
       ],
     }),

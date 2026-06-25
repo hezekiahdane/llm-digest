@@ -15,7 +15,7 @@ import type {
 } from '@/types/dashboard';
 
 const MAX_ACTIVITY = 50;
-const PROVIDERS: Provider[] = ['openai', 'anthropic', 'google', 'meta'];
+const PROVIDERS: Provider[] = ['openai', 'anthropic', 'google'];
 
 function computeUptime(history: StatusEntry[]): number {
   if (history.length === 0) return 100;

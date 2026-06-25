@@ -1,4 +1,4 @@
-export type Provider = 'openai' | 'anthropic' | 'google' | 'meta';
+export type Provider = 'openai' | 'anthropic' | 'google';
 export type ProviderStatus = 'operational' | 'degraded' | 'outage' | 'unknown';
 export type ActivityEventType =
   | 'release'

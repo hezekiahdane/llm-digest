@@ -16,7 +16,6 @@ const FEEDS: Array<{ provider: Provider; url: string }> = [
   { provider: 'openai', url: 'https://openai.com/news/rss.xml' },
   { provider: 'anthropic', url: 'https://www.anthropic.com/rss.xml' },
   { provider: 'google', url: 'https://blog.google/products/gemini/rss' },
-  { provider: 'meta', url: 'https://ai.meta.com/blog/rss' },
 ];
 
 const parser = new XMLParser({

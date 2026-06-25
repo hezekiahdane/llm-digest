@@ -16,7 +16,7 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_SITE_URL: z.string().url().default('http://localhost:3000'),
-    NEXT_PUBLIC_SITE_NAME: z.string().default('AI Intelligence Dashboard'),
+    NEXT_PUBLIC_SITE_NAME: z.string().default('AI Digest Dashboard'),
     NEXT_PUBLIC_VERCEL_ENV: z
       .enum(['production', 'preview', 'development'])
       .optional(),

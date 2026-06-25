@@ -6,9 +6,9 @@ import { fetchBenchmarks } from '../benchmarks';
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/models';
 
 describe('fetchBenchmarks', () => {
-  it('returns all 8 target models', async () => {
+  it('returns all 7 target models', async () => {
     const results = await fetchBenchmarks();
-    expect(results).toHaveLength(8);
+    expect(results).toHaveLength(7);
     for (const model of results) {
       expect(model.id).toBeTruthy();
       expect(model.name).toBeTruthy();
@@ -25,7 +25,6 @@ describe('fetchBenchmarks', () => {
       'claude-sonnet-4-6',
       'gemini-2.5-pro',
       'gemini-2.5-flash',
-      'llama-4-maverick',
     ];
     const results = await fetchBenchmarks();
     for (const model of results) {
@@ -41,9 +40,6 @@ describe('fetchBenchmarks', () => {
     );
     expect(results.find((m) => m.id === 'gemini-2.5-pro')?.provider).toBe(
       'google',
-    );
-    expect(results.find((m) => m.id === 'llama-4-maverick')?.provider).toBe(
-      'meta',
     );
   });
 

@@ -59,16 +59,6 @@ async function fetchGoogleStatus(now: string): Promise<RawProviderStatus> {
   return { provider: 'google', status, lastChecked: now };
 }
 
-async function fetchMetaStatus(now: string): Promise<RawProviderStatus> {
-  // Meta AI does not have a public Statuspage — use their developer platform status
-  const res = await fetch('https://developers.facebook.com/status/dashboard/', {
-    cache: 'no-store',
-  });
-  // If the page loads (2xx), assume operational — outages are announced differently
-  const status: ProviderStatus = res.ok ? 'operational' : 'unknown';
-  return { provider: 'meta', status, lastChecked: now };
-}
-
 export async function fetchAllStatuses(
   now: string,
 ): Promise<RawProviderStatus[]> {
@@ -77,10 +67,9 @@ export async function fetchAllStatuses(
       fetchStatuspageStatus(provider, url, now),
     ),
     fetchGoogleStatus(now),
-    fetchMetaStatus(now),
   ]);
 
-  const providers: Provider[] = ['openai', 'anthropic', 'google', 'meta'];
+  const providers: Provider[] = ['openai', 'anthropic', 'google'];
 
   return results.map((result, i) => {
     if (result.status === 'fulfilled') return result.value;

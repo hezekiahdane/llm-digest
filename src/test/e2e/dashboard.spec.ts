@@ -4,7 +4,7 @@ test.describe('Dashboard page', () => {
   test('renders the dashboard heading', async ({ page }) => {
     await page.goto('/dashboard');
     await expect(
-      page.getByRole('heading', { name: /AI Intelligence Dashboard/i }),
+      page.getByRole('heading', { name: /AI Digest Dashboard/i }),
     ).toBeVisible();
   });
 

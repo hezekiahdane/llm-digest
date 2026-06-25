@@ -2,13 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { fetchAllReleases } from '../releases';
 
 describe('fetchAllReleases', () => {
-  it('returns releases from all 4 providers', async () => {
+  it('returns releases from all 3 providers', async () => {
     const results = await fetchAllReleases();
     const providers = new Set(results.map((r) => r.provider));
     expect(providers.has('openai')).toBe(true);
     expect(providers.has('anthropic')).toBe(true);
     expect(providers.has('google')).toBe(true);
-    expect(providers.has('meta')).toBe(true);
   });
 
   it('returns at most 20 items total', async () => {
@@ -45,7 +44,6 @@ describe('fetchAllReleases', () => {
       http.get('https://blog.google/products/gemini/rss', () =>
         HttpResponse.error(),
       ),
-      http.get('https://ai.meta.com/blog/rss', () => HttpResponse.error()),
     );
     const results = await fetchAllReleases();
     expect(results).toEqual([]);

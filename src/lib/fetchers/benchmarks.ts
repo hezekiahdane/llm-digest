@@ -28,11 +28,6 @@ const OPENROUTER_MODELS: Record<
     name: 'Gemini 2.5 Flash',
     provider: 'google',
   },
-  'meta-llama/llama-4-maverick': {
-    id: 'llama-4-maverick',
-    name: 'Llama 4 Maverick',
-    provider: 'meta',
-  },
 };
 
 // Publicly available benchmark scores — stable after model release
@@ -48,7 +43,6 @@ const BENCHMARK_SCORES: Record<
   'claude-sonnet-4-6': { mmlu: 91.2, humaneval: 88.5, math: 80.1 },
   'gemini-2.5-pro': { mmlu: 95.0, humaneval: 90.0, math: 91.0 },
   'gemini-2.5-flash': { mmlu: 89.0, humaneval: 85.0, math: 80.0 },
-  'llama-4-maverick': { mmlu: 88.0, humaneval: 82.0, math: 73.0 },
 };
 
 interface OpenRouterModel {

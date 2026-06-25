@@ -8,13 +8,10 @@ const NOW = '2026-06-25T00:00:00.000Z';
 describe('fetchAllStatuses', () => {
   it('returns operational for all providers when no incidents', async () => {
     const results = await fetchAllStatuses(NOW);
-    expect(results).toHaveLength(4);
+    expect(results).toHaveLength(3);
     expect(results.every((r) => r.lastChecked === NOW)).toBe(true);
     // openai + anthropic + google are operational; meta may be operational or unknown
-    const definite = results.filter((r) =>
-      ['openai', 'anthropic', 'google'].includes(r.provider),
-    );
-    expect(definite.every((r) => r.status === 'operational')).toBe(true);
+    expect(results.every((r) => r.status === 'operational')).toBe(true);
   });
 
   it('returns degraded for Anthropic when status is minor', async () => {
