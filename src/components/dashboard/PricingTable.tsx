@@ -1,11 +1,5 @@
+import { PROVIDER_LABELS } from '@/lib/constants';
 import type { BenchmarkData } from '@/types/dashboard';
-
-const PROVIDER_LABELS: Record<string, string> = {
-  openai: 'OpenAI',
-  anthropic: 'Anthropic',
-  google: 'Google',
-  meta: 'Meta',
-};
 
 const PROVIDER_COLORS: Record<string, string> = {
   openai: 'bg-emerald-100 text-emerald-800',

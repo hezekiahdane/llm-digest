@@ -1,3 +1,4 @@
+import { PROVIDER_LABELS } from '@/lib/constants';
 import type { ActivityEvent, ActivityEventType } from '@/types/dashboard';
 
 const TYPE_LABEL: Record<ActivityEventType, string> = {
@@ -14,13 +15,6 @@ const TYPE_COLOR: Record<ActivityEventType, string> = {
   incident_resolved: 'bg-green-100 text-green-800',
   price_change: 'bg-yellow-100 text-yellow-800',
   benchmark_change: 'bg-purple-100 text-purple-800',
-};
-
-const PROVIDER_LABELS: Record<string, string> = {
-  openai: 'OpenAI',
-  anthropic: 'Anthropic',
-  google: 'Google',
-  meta: 'Meta',
 };
 
 function formatDate(iso: string): string {

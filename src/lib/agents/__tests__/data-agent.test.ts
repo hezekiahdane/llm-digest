@@ -18,15 +18,10 @@ vi.mock('@/lib/fetchers/benchmarks', () => ({
 vi.mock('@/lib/cache', () => ({
   getCachedSnapshot: vi.fn(),
   setCachedSnapshot: vi.fn(),
-  getStatusHistory: vi.fn(),
   appendStatusHistory: vi.fn(),
 }));
 
-import {
-  appendStatusHistory,
-  getCachedSnapshot,
-  getStatusHistory,
-} from '@/lib/cache';
+import { appendStatusHistory, getCachedSnapshot } from '@/lib/cache';
 import { fetchBenchmarks } from '@/lib/fetchers/benchmarks';
 import { fetchAllReleases } from '@/lib/fetchers/releases';
 import { fetchAllStatuses } from '@/lib/fetchers/status';
@@ -85,7 +80,6 @@ beforeEach(() => {
   vi.mocked(fetchAllReleases).mockResolvedValue(mockReleases);
   vi.mocked(fetchBenchmarks).mockResolvedValue(mockBenchmarks);
   vi.mocked(getCachedSnapshot).mockResolvedValue(null);
-  vi.mocked(getStatusHistory).mockResolvedValue([]);
   vi.mocked(appendStatusHistory).mockImplementation(
     async (_provider, entry) => [entry],
   );
@@ -108,6 +102,16 @@ describe('runDataAgent', () => {
     ]);
     const snapshot = await runDataAgent();
     expect(snapshot.statuses[0].uptime30d).toBe(100);
+  });
+
+  it('computes partial uptime correctly from mixed history', async () => {
+    vi.mocked(appendStatusHistory).mockResolvedValue([
+      { timestamp: '2026-06-25T00:00:00.000Z', status: 'operational' },
+      { timestamp: '2026-06-24T00:00:00.000Z', status: 'degraded' },
+    ]);
+    const snapshot = await runDataAgent();
+    // 1 operational out of 2 = 50%
+    expect(snapshot.statuses[0].uptime30d).toBe(50);
   });
 
   it('detects price change and emits activity event', async () => {

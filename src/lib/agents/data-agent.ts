@@ -7,7 +7,6 @@ import type {
   BenchmarkData,
   DashboardSnapshot,
   Provider,
-  ProviderStatus,
   ProviderStatusData,
   RawBenchmark,
   RawProviderStatus,
@@ -184,7 +183,7 @@ export async function runDataAgent(): Promise<DashboardSnapshot> {
     return (
       found ?? {
         provider,
-        status: 'unknown' as ProviderStatus,
+        status: 'unknown',
         lastChecked: now,
       }
     );

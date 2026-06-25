@@ -14,10 +14,10 @@ import type { BenchmarkData } from '@/types/dashboard';
 type Tab = 'mmlu' | 'humaneval' | 'math' | 'latency';
 
 const TABS: Array<{ key: Tab; label: string }> = [
-  { key: 'mmlu', label: 'MMLU' },
-  { key: 'humaneval', label: 'HumanEval' },
-  { key: 'math', label: 'MATH' },
-  { key: 'latency', label: 'Latency (ms)' },
+  { key: 'mmlu', label: 'Quality Index' },
+  { key: 'humaneval', label: 'Coding Index' },
+  { key: 'math', label: 'Math' },
+  { key: 'latency', label: 'Speed (ms/token)' },
 ];
 
 type BenchmarkField = 'mmlu' | 'humaneval' | 'math' | 'latencyP50';
@@ -70,7 +70,9 @@ export function BenchmarkPanel({ benchmarks }: BenchmarkPanelProps) {
             tick={{ fontSize: 11 }}
             width={80}
           />
-          <Tooltip formatter={(v: number) => v.toFixed(1)} />
+          <Tooltip
+            formatter={(v) => (typeof v === 'number' ? v.toFixed(1) : v)}
+          />
           <Bar dataKey="value" fill="#6366f1" radius={[0, 4, 4, 0]} />
         </BarChart>
       </ResponsiveContainer>

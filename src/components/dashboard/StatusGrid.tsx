@@ -1,11 +1,5 @@
+import { PROVIDER_LABELS } from '@/lib/constants';
 import type { ProviderStatus, ProviderStatusData } from '@/types/dashboard';
-
-const PROVIDER_LABELS: Record<string, string> = {
-  openai: 'OpenAI',
-  anthropic: 'Anthropic',
-  google: 'Google',
-  meta: 'Meta',
-};
 
 const STATUS_LABEL: Record<ProviderStatus, string> = {
   operational: 'Operational',
@@ -52,7 +46,7 @@ export function StatusGrid({ statuses }: StatusGridProps) {
             {STATUS_LABEL[s.status]}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
-            30d uptime: <span>{s.uptime30d}%</span>
+            Uptime: <span>{s.uptime30d}%</span>
           </p>
         </div>
       ))}
