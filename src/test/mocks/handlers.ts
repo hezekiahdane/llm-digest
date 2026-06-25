@@ -5,8 +5,24 @@ const mockStatuspageResponse = (indicator: 'none' | 'minor' | 'major') => ({
   incidents: [],
 });
 
-const mockRssItem = (provider: string, num = 1) =>
-  `<?xml version="1.0"?><rss version="2.0"><channel>${Array.from({ length: num }, (_, i) => `<item><title>${provider} Update ${i + 1}</title><link>https://${provider}.com/blog/${i + 1}</link><pubDate>Wed, 25 Jun 2026 00:00:00 +0000</pubDate><guid>https://${provider}.com/blog/${i + 1}</guid></item>`).join('')}</channel></rss>`;
+function buildRssItem(provider: string, index: number): string {
+  const num = index + 1;
+  return [
+    '<item>',
+    `<title>${provider} Update ${num}</title>`,
+    `<link>https://${provider}.com/blog/${num}</link>`,
+    '<pubDate>Wed, 25 Jun 2026 00:00:00 +0000</pubDate>',
+    `<guid>https://${provider}.com/blog/${num}</guid>`,
+    '</item>',
+  ].join('');
+}
+
+function mockRssXml(provider: string, count: number): string {
+  const items = Array.from({ length: count }, (_, i) =>
+    buildRssItem(provider, i),
+  ).join('');
+  return `<?xml version="1.0"?><rss version="2.0"><channel>${items}</channel></rss>`;
+}
 
 export const handlers = [
   // Statuspage.io — OpenAI, Anthropic, Meta
@@ -25,16 +41,16 @@ export const handlers = [
   ),
   // RSS feeds
   http.get('https://openai.com/news/rss.xml', () =>
-    HttpResponse.text(mockRssItem('openai', 3)),
+    HttpResponse.text(mockRssXml('openai', 3)),
   ),
   http.get('https://www.anthropic.com/rss.xml', () =>
-    HttpResponse.text(mockRssItem('anthropic', 3)),
+    HttpResponse.text(mockRssXml('anthropic', 3)),
   ),
   http.get('https://blog.google/products/gemini/rss', () =>
-    HttpResponse.text(mockRssItem('google', 3)),
+    HttpResponse.text(mockRssXml('google', 3)),
   ),
   http.get('https://ai.meta.com/blog/rss', () =>
-    HttpResponse.text(mockRssItem('meta', 3)),
+    HttpResponse.text(mockRssXml('meta', 3)),
   ),
   // Artificial Analysis
   http.get('https://artificialanalysis.ai/api/v1/models', () =>
