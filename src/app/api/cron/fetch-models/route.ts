@@ -14,7 +14,9 @@ export async function GET(request: Request): Promise<NextResponse> {
     const snapshot = await runDataAgent();
     await setCachedSnapshot(snapshot);
     return NextResponse.json({ ok: true, fetchedAt: snapshot.fetchedAt });
-  } catch {
+  } catch (err) {
+    // biome-ignore lint/suspicious/noConsole: Error logging required for production observability
+    console.error('[cron] fetch-models failed:', err);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 },

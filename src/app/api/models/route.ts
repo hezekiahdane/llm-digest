@@ -11,7 +11,9 @@ export async function GET(_request: Request): Promise<NextResponse> {
       );
     }
     return NextResponse.json(snapshot);
-  } catch {
+  } catch (err) {
+    // biome-ignore lint/suspicious/noConsole: Error logging required for production observability
+    console.error('[api/models] KV read failed:', err);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 },
