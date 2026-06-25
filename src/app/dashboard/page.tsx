@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Dashboard } from '@/components/dashboard/Dashboard';
-import type { DashboardSnapshot } from '@/types/dashboard';
+import { getCachedSnapshot } from '@/lib/cache';
 
 export const revalidate = 3600;
 
@@ -9,23 +9,8 @@ export const metadata: Metadata = {
   description: 'Live AI model status, benchmarks, pricing, and releases.',
 };
 
-async function getSnapshot(): Promise<DashboardSnapshot | null> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-  try {
-    const res = await fetch(`${baseUrl}/api/models`, {
-      next: { revalidate: 3600 },
-    });
-    if (res.status === 503) return null;
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data: unknown = await res.json();
-    return data as DashboardSnapshot;
-  } catch {
-    return null;
-  }
-}
-
 export default async function DashboardPage() {
-  const snapshot = await getSnapshot();
+  const snapshot = await getCachedSnapshot();
 
   if (!snapshot) {
     return (
