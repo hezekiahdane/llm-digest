@@ -17,7 +17,8 @@ async function getSnapshot(): Promise<DashboardSnapshot | null> {
     });
     if (res.status === 503) return null;
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return res.json() as Promise<DashboardSnapshot>;
+    const data: unknown = await res.json();
+    return data as DashboardSnapshot;
   } catch {
     return null;
   }
