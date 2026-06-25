@@ -5,43 +5,14 @@
 
 import { type RenderOptions, render } from '@testing-library/react';
 import type { ReactElement } from 'react';
-import type { DevPanelContextValue } from '@/components/dev';
-import {
-  DevPanelContext,
-  defaultDevPanelState,
-} from '@/components/dev/DevPanelProvider';
 
-interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
-  devPanelValue?: Partial<DevPanelContextValue>;
+function AllProviders({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }
 
-// Extend with additional providers as needed (e.g. NextIntlClientProvider, QueryClientProvider)
-function AllProviders({
-  children,
-  devPanelValue,
-}: {
-  children: React.ReactNode;
-  devPanelValue?: Partial<DevPanelContextValue>;
-}) {
-  const ctxValue: DevPanelContextValue = {
-    ...defaultDevPanelState,
-    ...devPanelValue,
-  };
-  return (
-    <DevPanelContext.Provider value={ctxValue}>
-      {children}
-    </DevPanelContext.Provider>
-  );
-}
-
-function customRender(
-  ui: ReactElement,
-  { devPanelValue, ...options }: CustomRenderOptions = {},
-) {
+function customRender(ui: ReactElement, options: RenderOptions = {}) {
   return render(ui, {
-    wrapper: ({ children }) => (
-      <AllProviders devPanelValue={devPanelValue}>{children}</AllProviders>
-    ),
+    wrapper: ({ children }) => <AllProviders>{children}</AllProviders>,
     ...options,
   });
 }

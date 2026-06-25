@@ -13,13 +13,11 @@ interface WithApiOptions<TSchema extends z.ZodType = z.ZodType> {
   schema?: TSchema;
   rateLimit?: RateLimitPreset;
   csrf?: boolean;
-  auth?: boolean;
 }
 
 interface ApiContext<T = unknown> {
   data: T;
   request: Request;
-  user?: unknown;
 }
 
 type ApiHandler<T = unknown> = (
@@ -53,35 +51,7 @@ export function withApi<TSchema extends z.ZodType>(
         }
       }
 
-      // 3. Auth check (requires auth module)
-      let user: unknown;
-      if (options.auth) {
-        try {
-          // Dynamic path prevents Vite from resolving at transform time
-          const authPath = '@/lib/auth';
-          const { createServerClient } = await (import(
-            /* @vite-ignore */ authPath
-            // biome-ignore lint/suspicious/noExplicitAny: dynamic import requires any
-          ) as Promise<any>);
-          const supabase = await createServerClient();
-          const {
-            data: { user: authUser },
-          } = await supabase.auth.getUser();
-          if (!authUser) {
-            return NextResponse.json(errorResponse('Unauthorized'), {
-              status: 401,
-            });
-          }
-          user = authUser;
-        } catch {
-          return NextResponse.json(
-            errorResponse('Auth module not configured'),
-            { status: 500 },
-          );
-        }
-      }
-
-      // 4. Parse and validate body
+      // 3. Parse and validate body
       let data: z.infer<TSchema> = undefined as z.infer<TSchema>;
       if (options.schema) {
         const body = await request.json();
@@ -98,8 +68,8 @@ export function withApi<TSchema extends z.ZodType>(
         data = result.data;
       }
 
-      // 5. Execute handler
-      const response = await handler({ data, request, user });
+      // 4. Execute handler
+      const response = await handler({ data, request });
       return NextResponse.json(response, { status: 200 });
     } catch (error) {
       if (error instanceof AppError) {
