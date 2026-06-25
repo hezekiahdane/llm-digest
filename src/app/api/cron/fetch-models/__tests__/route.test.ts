@@ -7,6 +7,9 @@ vi.mock('@/lib/agents/data-agent', () => ({
 vi.mock('@/lib/cache', () => ({
   setCachedSnapshot: vi.fn(),
 }));
+vi.mock('next/cache', () => ({
+  revalidatePath: vi.fn(),
+}));
 
 import { runDataAgent } from '@/lib/agents/data-agent';
 import { setCachedSnapshot } from '@/lib/cache';

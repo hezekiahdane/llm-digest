@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Dashboard } from '@/components/dashboard/Dashboard';
 import { getCachedSnapshot } from '@/lib/cache';
 
-export const revalidate = 3600;
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: 'Dashboard',

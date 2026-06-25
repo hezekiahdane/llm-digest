@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { runDataAgent } from '@/lib/agents/data-agent';
 import { setCachedSnapshot } from '@/lib/cache';
@@ -13,6 +14,7 @@ export async function GET(request: Request): Promise<NextResponse> {
   try {
     const snapshot = await runDataAgent();
     await setCachedSnapshot(snapshot);
+    revalidatePath('/dashboard');
     return NextResponse.json({ ok: true, fetchedAt: snapshot.fetchedAt });
   } catch (err) {
     // biome-ignore lint/suspicious/noConsole: Error logging required for production observability
