@@ -37,7 +37,7 @@ describe('StatusGrid', () => {
 
   it('displays uptime percentages', () => {
     render(<StatusGrid statuses={MOCK_STATUSES} />);
-    expect(screen.getByText('99.9%')).toBeInTheDocument();
+    expect(screen.getByText(/99\.9.*uptime/i)).toBeInTheDocument();
   });
 
   it('shows operational status label', () => {

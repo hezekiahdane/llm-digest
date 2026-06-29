@@ -6,12 +6,12 @@ const mockRedis = vi.hoisted(() => ({
 }));
 
 vi.mock('@upstash/redis', () => ({
-  Redis: vi.fn().mockImplementation(
-    class {
-      get = mockRedis.get;
-      set = mockRedis.set;
-    },
-  ),
+  Redis: vi.fn().mockImplementation(function () {
+    return {
+      get: mockRedis.get,
+      set: mockRedis.set,
+    };
+  }),
 }));
 
 import {
