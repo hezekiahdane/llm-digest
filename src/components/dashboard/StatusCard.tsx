@@ -47,9 +47,9 @@ export function StatusCard({ data }: StatusCardProps) {
         {sparkline.length === 0 ? (
           <span className="text-xs text-slate-600">No history yet</span>
         ) : (
-          sparkline.map((entry, i) => (
+          sparkline.map((entry) => (
             <span
-              key={i}
+              key={entry.timestamp}
               className={`h-2 w-2 rounded-full ${STATUS_DOT[entry.status]}`}
               title={`${entry.timestamp}: ${entry.status}`}
             />

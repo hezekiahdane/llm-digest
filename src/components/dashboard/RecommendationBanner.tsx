@@ -51,8 +51,7 @@ export function RecommendationBanner({
       </p>
       <div className="mt-2 flex flex-wrap items-center gap-3">
         <span className="text-sm text-slate-400">
-          {PROVIDER_LABELS[recommendation.provider as keyof typeof PROVIDER_LABELS] ??
-            recommendation.provider}
+          {PROVIDER_LABELS[recommendation.provider] ?? recommendation.provider}
         </span>
         <span
           className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_BADGE[providerStatus]}`}

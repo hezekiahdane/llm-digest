@@ -42,6 +42,7 @@ export function WhatChanged({ events }: WhatChangedProps) {
   const cutoff = Date.now() - SEVEN_DAYS_MS;
   const filtered = events
     .filter((e) => new Date(e.date).getTime() >= cutoff)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 6);
 
   return (

@@ -113,6 +113,17 @@ describe('getRecommendation', () => {
     );
   });
 
+  it('does not recommend an outage provider in fallback', () => {
+    const statuses: ProviderStatusData[] = [
+      { ...ALL_OPERATIONAL[0], status: 'outage', uptime30d: 99 },   // outage, highest uptime
+      { ...ALL_OPERATIONAL[1], status: 'degraded', uptime30d: 95 }, // degraded
+      { ...ALL_OPERATIONAL[2], status: 'degraded', uptime30d: 80 }, // degraded
+    ];
+    const result = getRecommendation(BENCHMARKS, statuses);
+    expect(result?.provider).not.toBe('openai');   // outage provider must be skipped
+    expect(result?.provider).toBe('anthropic');    // highest-uptime non-outage provider
+  });
+
   it('returns null when benchmarks are empty', () => {
     const result = getRecommendation([], ALL_OPERATIONAL);
     expect(result).toBeNull();

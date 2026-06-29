@@ -1,9 +1,9 @@
-import type { BenchmarkData, ProviderStatusData } from '@/types/dashboard';
+import type { BenchmarkData, Provider, ProviderStatusData } from '@/types/dashboard';
 
 export interface Recommendation {
   modelId: string;
   modelName: string;
-  provider: string;
+  provider: Provider;
   reason: string;
 }
 
@@ -39,7 +39,9 @@ export function getRecommendation(
     };
   }
 
-  const fallback = [...statuses].sort((a, b) => b.uptime30d - a.uptime30d)[0];
+  const fallback = [...statuses]
+    .filter((s) => s.status !== 'outage')
+    .sort((a, b) => b.uptime30d - a.uptime30d)[0];
   if (!fallback) return null;
 
   const fallbackModel = benchmarks.find(
