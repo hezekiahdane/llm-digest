@@ -45,7 +45,7 @@ async function fetchFeed(
   return items.slice(0, 5).map((item) => {
     const guid = extractGuid(item.guid) || item.link;
     return {
-      id: `${provider}-${Buffer.from(guid).toString('base64').slice(0, 16)}`,
+      id: `${provider}-${Buffer.from(guid).toString('base64').slice(-24)}`,
       provider,
       title: item.title,
       link: item.link,

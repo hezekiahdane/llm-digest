@@ -58,9 +58,9 @@ export function WhatChanged({ events }: WhatChangedProps) {
         </p>
       ) : (
         <ul className="divide-y divide-slate-800">
-          {filtered.map((event) => (
+          {filtered.map((event, i) => (
             <li
-              key={event.id}
+              key={`${event.id}-${i}`}
               className="flex items-start justify-between gap-4 px-5 py-4"
             >
               <div className="flex min-w-0 flex-col gap-1.5">
