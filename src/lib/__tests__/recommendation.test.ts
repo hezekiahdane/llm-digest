@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { getRecommendation } from '../recommendation';
 import type { BenchmarkData, ProviderStatusData } from '@/types/dashboard';
+import { getRecommendation } from '../recommendation';
 
 const BENCHMARKS: BenchmarkData[] = [
   {

@@ -12,9 +12,7 @@ export function getRecommendation(
   statuses: ProviderStatusData[],
 ): Recommendation | null {
   const operationalProviders = new Set(
-    statuses
-      .filter((s) => s.status === 'operational')
-      .map((s) => s.provider),
+    statuses.filter((s) => s.status === 'operational').map((s) => s.provider),
   );
 
   const scored = benchmarks
@@ -44,7 +42,9 @@ export function getRecommendation(
   const fallback = [...statuses].sort((a, b) => b.uptime30d - a.uptime30d)[0];
   if (!fallback) return null;
 
-  const fallbackModel = benchmarks.find((b) => b.provider === fallback.provider);
+  const fallbackModel = benchmarks.find(
+    (b) => b.provider === fallback.provider,
+  );
   if (!fallbackModel) return null;
 
   return {
